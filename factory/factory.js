@@ -17,8 +17,24 @@ class PizzaMarguerita extends Pizza {
 }
 
 class Pizzaria {
-      criarPizza({
+      criarPizza(){
             const sabor = this.criarSabor();
             return sabor.preparar();
-      })
+      }
+
+      criarSabor(){
+            throw "Método abstrato!";
+      }
+}
+
+class PizzariaCalabresa extends Pizzaria {
+      criarSabor() {
+            return new PizzaCalabresa();
+      }
+}
+
+class PizzariaMarguerita extends Pizzaria {
+      criarSabor() {
+            return new PizzaMarguerita();
+      }
 }
