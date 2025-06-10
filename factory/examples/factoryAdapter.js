@@ -33,9 +33,6 @@ class MensagemFactory {
 }
 
 
-
-
-
 class MensagemSMSFactory extends MensagemFactory {
     criarMensagem() {
         return new MensagemSMS();
