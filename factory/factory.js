@@ -1,17 +1,24 @@
 class Pizza {
-      perparar(){
+      preparar(){
             throw "Método abstrato!";
       }
 }
 
 class PizzaCalabresa extends Pizza {
-      perparar() {
+      preparar() {
             return "Pizza Calabresa preparada";
       }
 }
 
 class PizzaMarguerita extends Pizza {
-      perparar() {
+      preparar() {
             return "Pizza Marguerita preparada";
       }
+}
+
+class Pizzaria {
+      criarPizza({
+            const sabor = this.criarSabor();
+            return sabor.preparar();
+      })
 }
