@@ -91,41 +91,41 @@ class Logging extends ExportadorDecorator {
 }
 
 class RelatorioFactory {
+  static createRelatorio(type) {
+    if (type === "vendas") return new RelatorioVendas();
+    if (type === "financeiro") return new RelatorioFinanceiro();
+    if (type === "rh") return new RelatorioRH();
+    throw new Error("Tipo inválido");
+  }
+
   static create(type, format) {
     const relatorio = RelatorioFactory.createRelatorio(type);
-    if (type === "vendas") {
-      if (format === "pdf") {
-        return new ExportadorPDF(relatorio);
-      } else if (format === "excel") {
-        return new ExportadorExcel(relatorio);
-      } else if (format === "word") {
-        return new ExportadorWord(relatorio);
+
+    const exportadores = {
+      pdf: ExportadorPDF,
+      excel: ExportadorExcel,
+      word: ExportadorWord
+    };
+
+    const ExportadorClass = exportadores[format];
+    if (!ExportadorClass) throw new Error("Formato inválido");
+
+    return new ExportadorClass(relatorio);
+  }
+
+  static createWithDecorator(type, format, decorators = []) {
+    let exportador = RelatorioFactory.create(type, format);
+
+    for (const decorator of decorators) {
+      if (decorator === "criptografia") {
+        exportador = new Criptografia(exportador);
+      } else if (decorator === "logging") {
+        exportador = new Logging(exportador);
       } else {
-        throw new Error("Formato inválido");
+        throw new Error("Decorator inválido");
       }
-      
-    } else if (type === "financeiro") {
-      if (format === "pdf") {
-        return new ExportadorPDF(relatorio);
-      } else if (format === "excel") {
-        return new ExportadorExcel(relatorio);
-      } else if (format === "word") {
-        return new ExportadorWord(relatorio);
-      } else {
-        throw new Error("Formato inválido");
-      }
-    } else if (type === "rh") {
-      if (format === "pdf") {
-        return new ExportadorPDF(relatorio);
-      } else if (format === "excel") {
-        return new ExportadorExcel(relatorio);
-      } else if (format === "word") {
-        return new ExportadorWord(relatorio);
-      } else {
-        throw new Error("Formato inválido");
-      }
-    } else {
-      throw new Error("Tipo inválido");
     }
+
+    return exportador;
   }
 }
