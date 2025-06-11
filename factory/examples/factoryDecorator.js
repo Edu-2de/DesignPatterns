@@ -1,50 +1,62 @@
 // Componente base
-class Cafe {
+class Sanduiche {
   custo() {
-    return 5;
+    return 20;
   }
   descricao() {
-    return "Café";
+    return "Sanduíche";
   }
 }
 
 // Decorator base (opcional, para organização)
-class CafeDecorator {
-  constructor(cafe) {
-    this.cafe = cafe;
+class SanduicheDecorator {
+  constructor(sanduiche) {
+    this.sanduiche = sanduiche;
   }
   custo() {
-    return this.cafe.custo();
+    return this.sanduiche.custo();
   }
   descricao() {
-    return this.cafe.descricao();
+    return this.sanduiche.descricao();
   }
 }
 
-// Decorator concreto: adiciona leite
-class ComLeite extends CafeDecorator {
+// Decorator concreto: adiciona queijo
+class ComQueijo extends SanduicheDecorator {
   custo() {
-    return super.custo() + 2;
+    return super.custo() + 20;
   }
   descricao() {
-    return super.descricao() + " com leite";
+    return super.descricao() + " com queijo";
   }
 }
 
-// Decorator concreto: adiciona chocolate
-class ComChocolate extends CafeDecorator {
+// Decorator concreto: adiciona bacon
+class ComBacon extends SanduicheDecorator {
   custo() {
-    return super.custo() + 3;
+    return super.custo() + 30;
   }
   descricao() {
-    return super.descricao() + " com chocolate";
+    return super.descricao() + " com bacon";
   }
 }
+class SanduicheFactory {
+  static create(choices = []) {
+    let pedido = new Sanduiche();
+    for (const choice of choices) {
+      if (choice === "queijo") {
+        pedido = new ComQueijo(pedido);
+      } else if (choice === "bacon") {
+        pedido = new ComBacon(pedido);
+      } else {
+        throw new Error("Tipo inválido");
+      } 
+    } 
+    return pedido; 
+  } 
+}
 
-// Uso:
-let pedido = new Cafe();
-pedido = new ComLeite(pedido);
-pedido = new ComChocolate(pedido);
 
-console.log(pedido.descricao()); // Café com leite com chocolate
-console.log(pedido.custo());     // 5 + 2 + 3 = 10
+let pedido = SanduicheFactory.create(["queijo", "bacon"]);
+console.log(pedido.descricao()); // Sanduíche com queijo com bacon
+console.log(pedido.custo());    
