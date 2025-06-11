@@ -1,13 +1,7 @@
-<<<<<<< HEAD
 // Implementação do Exportador (Bridge)
 class ExportadorDados {
     exportar(dados) {
         throw "Método abstrato!";
-=======
-class ExportadorDados{
-    exportar(dados){
-        throw `Método abstrato`
->>>>>>> 76c036252f45aa0f14917771de734840e68b7717
     }
 }
 
@@ -16,23 +10,14 @@ class ExportadorPDF extends ExportadorDados {
         return `PDF enviado: ${dados}`;
     }
 }
-<<<<<<< HEAD
 
-=======
->>>>>>> 76c036252f45aa0f14917771de734840e68b7717
 class ExportadorCSV extends ExportadorDados {
     exportar(dados) {
         return `CSV enviado: ${dados}`;
     }
 }
 
-<<<<<<< HEAD
 // Abstração do Relatório (Bridge)
-=======
-
-
-
->>>>>>> 76c036252f45aa0f14917771de734840e68b7717
 class Relatorio {
     constructor(exportador) {
         this.exportador = exportador;
@@ -42,7 +27,6 @@ class Relatorio {
     }
 }
 
-<<<<<<< HEAD
 class RelatorioFinanceiro extends Relatorio {
     gerar(dados) {
         return `Alerta: ${this.exportador.exportar(dados)}`;
@@ -56,23 +40,6 @@ class RelatorioVendas extends Relatorio {
 }
 
 // Factory Method
-=======
-
-
-
-class RelatorioFinanceiro extends Relatorio  {
-    gerar(dados) {
-        return `Alerta: ${this.exportador.enviar(dados)}`;
-    }
-}
-
-class RelatorioVendas extends Relatorio  {
-    gerar(dados) {
-        return `Promoção: ${this.exportador.enviar(dados)}`;
-    }
-}
-
->>>>>>> 76c036252f45aa0f14917771de734840e68b7717
 class RelatorioFactory {
     criarRelatorio() {
         throw "Método abstrato!";
@@ -85,7 +52,6 @@ class RelatorioFinanceiroPDFFactory extends RelatorioFactory {
     }
 }
 
-<<<<<<< HEAD
 class RelatorioFinanceiroCSVFactory extends RelatorioFactory {
     criarRelatorio() {
         return new RelatorioFinanceiro(new ExportadorCSV());
@@ -112,10 +78,3 @@ console.log(relatorio1.gerar("Balanço 2025")); // Alerta: PDF enviado: Balanço
 const factory2 = new RelatorioVendasCSVFactory();
 const relatorio2 = factory2.criarRelatorio();
 console.log(relatorio2.gerar("Vendas Q1")); // Promoção: CSV enviado: Vendas Q1
-=======
-class RelatorioVendasCSVFactory extends RelatorioFactory{
-    criarRelatorio(){
-        return new RelatorioVendas(new ExportadorCSV());
-    }
-}
->>>>>>> 76c036252f45aa0f14917771de734840e68b7717
