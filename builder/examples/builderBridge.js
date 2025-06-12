@@ -19,62 +19,67 @@ class FormatoTXT extends FormatoSalvamento {
   }
 }
 
-class FormatoDOCX
+class FormatoDOCX extends FormatoSalvamento {
+  salvar(dados) {
+    return `[DOCX] Titulo: ${dados.titulo} - Conteudo: ${dados.conteudo} - Autor: ${dados.autor}`;
+  }
+}
 
 // --- Abstração ---
-class Mensagem {
-  constructor(builder, canalEnvio) {
-    this.assunto = builder.assunto;
-    this.corpo = builder.corpo;
-    this.destinatario = builder.destinatario;
-    this.canalEnvio = canalEnvio;
+class Dados {
+  constructor(builder, formatoSalvamento) {
+    this.titulo = builder.titulo;
+    this.conteudo = builder.conteudo;
+    this.autor = builder.autor;
+    this.formatoSalvamento = formatoSalvamento;
   }
-  enviar() {
-    return this.canalEnvio.enviar(this);
+  salvar() {
+    return this.formatoSalvamento.salvar(this);
   }
 }
 
 // --- Builder ---
-class MensagemBuilder {
+class DadosBuilder {
   constructor() {
-    this.assunto = "Sem assunto";
-    this.corpo = "";
-    this.destinatario = "";
+    this.titulo = "Sem título";
+    this.conteudo = "";
+    this.autor = "";
   }
-  setAssunto(assunto) {
-    this.assunto = assunto;
+  setTitulo(titulo) {
+    this.titulo = titulo;
     return this;
   }
-  setCorpo(corpo) {
-    this.corpo = corpo;
+  setConteudo(conteudo) {
+    this.conteudo = conteudo;
     return this;
   }
-  setDestinatario(dest) {
-    this.destinatario = dest;
+  setAutor(autor) {
+    this.autor = autor;
     return this;
   }
-  build(canalEnvio) {
-    return new Mensagem(this, canalEnvio);
+  build(formatoSalvamento) {
+    return new Dados(this, formatoSalvamento);
   }
 }
 
 // --- Uso ---
-const email = new CanalEmail();
-const sms = new CanalSMS();
+const pdf = new FormatoPDF();
+const txt = new FormatoTXT();
+const docx = new FormatoDOCX();
 
-const mensagem1 = new MensagemBuilder()
-  .setAssunto("Olá")
-  .setCorpo("Bem-vindo ao sistema.")
-  .setDestinatario("joao@email.com")
-  .build(email);
+const dados1 = new DadosBuilder()
+  .setTitulo("Olá")
+  .setConteudo("Bem-vindo ao sistema.")
+  .setAutor("João")
+  .build(pdf);
 
-const mensagem2 = new MensagemBuilder()
-  .setCorpo("Seu código é 1234.")
-  .setDestinatario("+551199999999")
-  .build(sms);
+const dados2 = new DadosBuilder()
+  .setConteudo("Seu código é 1234.")
+  .setAutor("+551199999999")
+  .build(txt);
 
-console.log(mensagem1.enviar());
-// [Email] Para: joao@email.com - Assunto: Olá - Corpo: Bem-vindo ao sistema.
+console.log(dados1.salvar());
+// [PDF] Titulo: Olá - Conteudo: Bem-vindo ao sistema. - Autor: João
 
-console.log(mensagem2.enviar());
-// [SMS] Para: +551199999999 - Mensagem: Seu código é 1234.
+console.log(dados2.salvar());
+// [TXT] Titulo: Sem título - Conteudo: Seu código é 1234. - Autor: +551199999999
